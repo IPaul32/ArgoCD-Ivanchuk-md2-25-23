@@ -8,6 +8,7 @@ spec:
   source:
     repoURL: 'https://grafana.github.io/helm-charts'
     targetRevision: 2.9.11
+    chart: loki-stack
     helm:
       parameters:
         - name: grafana.enabled
@@ -23,3 +24,4 @@ spec:
     automated: {}
     syncOptions:
     - Validate=false
+
