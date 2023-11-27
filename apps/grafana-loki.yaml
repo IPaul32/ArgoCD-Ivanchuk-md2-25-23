@@ -1,20 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki
+  name: loki-stack
   namespace: argocd
 spec:
-  destination:
-    namespace: monitoring
-    server: https://kubernetes.default.svc
   project: default
   source:
-    chart: loki-stack
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 2.9.11
     helm:
       parameters:
-      - name: grafana.enabled
-        value: "false"
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.9.11
+        - name: grafana.enabled
+          value: 'false'
+        - name: loki.queryScheduler.maxOutstandingRequestsPerTenant
+          value: '10000'
+        - name: loki.limitsConfig.retentionPeriod
+          value: '720h'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
   syncPolicy:
     automated: {}
+    syncOptions:
+    - Validate=false
